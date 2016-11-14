@@ -13,6 +13,7 @@ import android.view.View;
 
 /**
  * Shows the use of notifications
+ * Support since Android 3.0 (API level 11)
  * @author Pello Altadill
  * Check documentation at:
  * https://developer.android.com/guide/topics/ui/notifiers/notifications.html
@@ -25,11 +26,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    /**
+     * called from the button
+     * @param v
+     */
     public void notifySomething (View v) {
+
+        // Create the notification
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setSmallIcon(R.drawable.notify);
         mBuilder.setContentTitle("New notification by Sample App");
         mBuilder.setContentText("Somebody has a message for you");
+
+        // Disappear when clicked
+        mBuilder.setAutoCancel(true);
+
+        // Optional, notification priority from -2 to 2
+        //mBuilder.setPriority(0); // default
 
         // This will be called from the notification
         Intent resultIntent = new Intent(this, CalledFromNotification.class);
@@ -37,22 +50,22 @@ public class MainActivity extends AppCompatActivity {
         // We create a stack for the new Activity
         // when we enter the notification and click back we will appear in the main.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-
        // // Adds the back stack for the Intent (but not the Intent itself)
         stackBuilder.addParentStack(CalledFromNotification.class);
-
         // Adds the Intent that starts the Activity to the top of the stack
         stackBuilder.addNextIntent(resultIntent);
-
         PendingIntent resultPendingIntent =
                 stackBuilder.getPendingIntent(
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
+
+        // This SETS the Activity to be called when clicking on notification
         mBuilder.setContentIntent(resultPendingIntent);
         NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
+        // Build notification and NOTIFY
         // notifyId allows us to update the notification, changing the number
         mNotificationManager.notify(notifyId, mBuilder.build());
     }
