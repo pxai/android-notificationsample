@@ -42,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         mBuilder.setAutoCancel(true);
 
         // Optional, notification priority from -2 to 2
-        //mBuilder.setPriority(0); // default
+        // 2 is the first icon
+        // -2 does not shot icon, but it appears in notification tab
+        mBuilder.setPriority(2); // default
 
         // This will be called from the notification
         Intent resultIntent = new Intent(this, CalledFromNotification.class);
